@@ -40,7 +40,15 @@ backend output-<%= port %>
         mode tcp
         balance leastconn
 <% ips.each_with_index do |ip, idx| %>
-	server node<%= idx %> <%= ip %>:<%= port %> check inter 5000
+    <% if p("rabbitmq-haproxy.cce_enable") %>
+        <% if port == 5671 %>
+        server node<%= idx %> <%= ip %>:<%= port %> check inter 5000 ssl verify required ca-file /var/vcap/jobs/rabbitmq-haproxy/config/backend-ca-certs.pem
+	<% else %>
+        server node<%= idx %> <%= ip %>:<%= port %> check inter 5000
+        <% end %>
+    <% else %>
+        server node<%= idx %> <%= ip %>:<%= port %> check inter 5000
+    <% end %>
 <% end %>
 <% end %>
 

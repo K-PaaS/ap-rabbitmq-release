@@ -33,6 +33,9 @@ mqtt.listeners.tcp = none
 stomp.listeners.tcp = none
 <% end -%>
 
+<% if p("rabbitmq-server.cce_enable") -%>
+listeners.tcp.default = _vm_ip:5672
+<% end -%>
 listeners.ssl.1 = 5671
 mqtt.listeners.ssl.1 = 8883
 stomp.listeners.ssl.1 = 61614

@@ -34,3 +34,9 @@ rabbitmq-server-3.8/rabbitmq-server-generic-unix-3.8.14.tar.xz:
   size: 15665332
   object_id: c40886a2-bb9c-4960-646f-78f82087f847
   sha: sha256:c9b154ea42bb0cfd1caef4869cfae3ed0fc3579794dd08bd555057af5736c06e
+
+# this comment prevents git conflicts
+cf-rabbitmq-multitenant-broker-golang/go1.16.linux-amd64.tar.gz:
+  size: 129003129
+  object_id: e42b6984-5091-46cf-4b8a-35908d4af5bc
+  sha: sha256:013a489ebb3e24ef3d915abe5b94c3286c070dfe0818d5bca8108f1d6e8440d2
