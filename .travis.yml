@@ -1,0 +1,15 @@
+language: go
+go:
+  - "1.15"
+install:
+  - bundle install
+  - go get github.com/onsi/ginkgo/ginkgo github.com/progrium/basht
+script:
+  - pushd src/rabbitmq-upgrade-preparation
+  - ginkgo -r
+  - popd
+  - pushd src/rabbitmq-admin
+  - ginkgo -r
+  - popd
+  - bash ./scripts/run-bash-tests
+  - bundle exec rake spec:unit

@@ -1,0 +1,91 @@
+---
+name: ((deployment-name))
+
+releases:
+- name: cf-rabbitmq
+  version: latest
+
+- name: routing
+  version: latest
+
+- name: bpm
+  version: latest
+
+stemcells:
+- alias: xenial
+  os: ubuntu-xenial
+  version: ((stemcell-version))
+
+instance_groups:
+- name: rmq
+  instances: 3
+  jobs:
+  - name: rabbitmq-server
+    release: cf-rabbitmq
+    properties:
+      rabbitmq-server:
+        version: ((rabbitmq_version))
+        plugins:
+        - rabbitmq_management
+        - rabbitmq_mqtt
+        - rabbitmq_stomp
+        ports:
+        - 5672
+        - 5671
+        - 1883
+        - 8883
+        - 61613
+        - 61614
+        - 15672
+        - 15674
+        administrators:
+          management:
+            username: ((rabbitmq-management-username))
+            password: ((rabbitmq-management-password))
+          broker:
+            username: ((rabbitmq-broker-username))
+            password: ((rabbitmq-broker-password))
+        cookie: ((rabbitmq-cookie))
+        cluster_partition_handling: ((cluster-partition-handling-strategy))
+  vm_type: n1-highmem-4
+  stemcell: xenial
+  persistent_disk_type: 100GB
+  networks:
+  - name: default
+  azs:
+  - z1
+  - z2
+
+- name: haproxy
+  instances: ((haproxy-instances))
+  jobs:
+  - name: rabbitmq-haproxy
+    release: cf-rabbitmq
+  - name: route_registrar
+    release: routing
+    consumes:
+      nats: {from: nats, deployment: cf}
+    properties:
+      route_registrar:
+        routes:
+        - name: ((rabbitmq-management-hostname))
+          port: 15672
+          registration_interval: 20s
+          uris:
+          - ((rabbitmq-management-hostname)).((system-domain))
+  - name: bpm
+    release: bpm
+  vm_type: n1-standard-1
+  stemcell: xenial
+  networks:
+  - name: default
+  azs:
+  - z1
+  - z2
+
+update:
+  canaries: 1
+  canary_watch_time: 30000-180000
+  update_watch_time: 30000-180000
+  max_in_flight: 1
+  serial: false

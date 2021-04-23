@@ -1,0 +1,7 @@
+---
+name: golang
+metadata:
+  version: '1.16'
+
+files:
+  - golang/go1.16.linux-amd64.tar.gz

@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -e
+
+[ -z "$DEBUG" ] || set -x
+
+export BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-https://192.168.50.6:25555}"
+export BOSH_NON_INTERACTIVE="${BOSH_NON_INTERACTIVE:-false}"
+export BOSH_CLIENT="${BOSH_CLIENT:-admin}"
+export BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
+export BOSH_CA_CERT="${BOSH_CA_CERT:-""}"
+export BOSH_DEPLOYMENT="${BOSH_DEPLOYMENT:-cf-rabbitmq}"
+
+export BOSH_MANIFEST=${1:-$("$HOME/workspace/cf-rabbitmq-release/scripts/generate-manifest")}
+
+main() {
+  upload_stemcell "$BOSH_MANIFEST"
+  download_blobs
+  create_dev_release && upload_dev_release
+  deploy "$BOSH_MANIFEST"
+}
+
+upload_stemcell() {
+  BOSH_STEMCELLCELL_NAME="${BOSH_STEMCELL:-bosh-warden-boshlite-ubuntu-trusty-go_agent}"
+  BOSH_STEMCELLCELL_VERSION="$(yq .stemcells[0].version "$BOSH_MANIFEST")"
+  BOSH_STEMCELLCELL_URL="https://bosh.io/d/stemcells/$BOSH_STEMCELLCELL_NAME?v=$BOSH_STEMCELLCELL_VERSION"
+
+  bosh upload-stemcell "$BOSH_STEMCELLCELL_URL" --name "$BOSH_STEMCELLCELL_NAME" --version "$BOSH_STEMCELLCELL_VERSION"
+}
+
+download_blobs() {
+  bosh sync-blobs
+}
+
+create_dev_release() {
+  bosh create-release --force
+}
+
+upload_dev_release() {
+  bosh upload-release
+}
+
+deploy() {
+  bosh deploy --no-redact "$BOSH_MANIFEST"
+}
+
+main

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+: "${WORKSPACE:="$HOME/workspace"}"
+: "${RELEASE_REPO:="$WORKSPACE/cf-rabbitmq-release"}"
+
+[[ -z "${DEBUG:-""}" ]] || set -x
+
+export BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-https://192.168.50.6:25555}"
+export BOSH_NON_INTERACTIVE="${BOSH_NON_INTERACTIVE:-false}"
+export BOSH_CLIENT="${BOSH_CLIENT:-admin}"
+export BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
+export BOSH_CA_CERT="${BOSH_CA_CERT:-""}"
+export BOSH_DEPLOYMENT="${BOSH_DEPLOYMENT:-cf-rabbitmq}"
+
+BOSH_MANIFEST="${1:-$(mktemp)}"
+
+main() {
+  do_interpolate
+}
+
+do_interpolate() {
+  local new_manifest="$BOSH_MANIFEST"
+
+  bosh interpolate \
+    --var-errs \
+    -v deployment-name="$BOSH_DEPLOYMENT" \
+    --vars-file="$RELEASE_REPO/manifests/lite-vars-file.yml" \
+    --ops-file="$RELEASE_REPO/manifests/change-vcap-password.yml" \
+  "$RELEASE_REPO/manifests/cf-rabbitmq-template.yml" \
+  > "$new_manifest"
+
+  echo "$new_manifest"
+}
+
+main "$@"

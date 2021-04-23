@@ -1,0 +1,39 @@
+---
+- type: replace
+  path: /releases/name=loggregator-agent?
+  value:
+    name: loggregator-agent
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=rmq/jobs/-
+  value: &loggregator_agent_config
+    name: loggregator_agent
+    release: loggregator-agent
+    consumes:
+      doppler:
+        from: doppler
+        deployment: ((cf-deployment-name))
+    properties:
+      deployment: ((deployment-name))
+      loggregator:
+        tls:
+          ca_cert: ((loggregator-agent-tls-ca-cert))
+          agent:
+            cert: ((loggregator-agent-tls-cert))
+            key: ((loggregator-agent-tls-key))
+      metrics:
+        ca_cert: ((loggregator-agent-tls-ca-cert))
+        cert: ((loggregator-agent-tls-cert))
+        key: ((loggregator-agent-tls-key))
+        server_name: loggregator_agent_metrics
+
+- type: replace
+  path: /instance_groups/name=rmq/jobs/-
+  value:
+    name: bpm
+    release: bpm
+
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/-
+  value: *loggregator_agent_config

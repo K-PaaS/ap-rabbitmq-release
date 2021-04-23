@@ -1,0 +1,182 @@
+# vim: set filetype=yaml :
+---
+name: rabbitmq-server
+packages:
+- erlang-23
+- rabbitmq-server-3.8
+- rabbitmq-common
+- rabbitmq-upgrade-preparation
+- rabbitmq-admin
+- openssl
+
+properties:
+  rabbitmq-server.version:
+    description: "Version of RabbitMQ to use"
+    default: "3.8"
+
+  rabbitmq-server.ssl.enabled:
+    default: false
+    description: "Use TLS listeners. Will not accept non-TLS connections"
+  rabbitmq-server.ssl.cacert:
+    description: "RabbitMQ server CA certificate(s).  If there is more than one certificate, they should be concatenated"
+  rabbitmq-server.ssl.cert:
+    description: "RabbitMQ server certificate"
+  rabbitmq-server.ssl.key:
+    description: "RabbitMQ server private key"
+  rabbitmq-server.ssl.versions:
+    description: "TLS protocol versions to support. Note that TLS 1.3 is incompatible with TLS 1.1 and TLS 1.0. The deployment will fail if TLS 1.3 is enabled alongside TLS 1.0 or TLS 1.1."
+    default: ['tlsv1.3','tlsv1.2']
+  rabbitmq-server.ssl.ciphers:
+    description: "TLS ciphers to use"
+  rabbitmq-server.ssl.verify:
+    description: "Peer verification method used by RabbitMQ server"
+    default: false
+  rabbitmq-server.ssl.verification_depth:
+    description: "Peer verification depth used by RabbitMQ server"
+    default: 5
+  rabbitmq-server.ssl.fail_if_no_peer_cert:
+    description: "Should RabbitMQ server reject connection if there is no peer cert"
+    default: false
+  rabbitmq-server.ssl.disable_non_ssl_listeners:
+    description: "Should RabbitMQ reject connections on non-TLS ports when TLS is enabled"
+    default: false
+
+  rabbitmq-server.management_tls.enabled:
+    default: false
+    description: "Use HTTPS listeners on management. Will not accept HTTP connections"
+  rabbitmq-server.management_tls.cacert:
+    description: "RabbitMQ management CA certificate"
+  rabbitmq-server.management_tls.cert:
+    description: "RabbitMQ management certificate"
+  rabbitmq-server.management_tls.key:
+    description: "RabbitMQ management private key"
+
+  rabbitmq-server.plugins:
+    description: "List of RabbitMQ plugins"
+  rabbitmq-server.ports:
+    description: "List of ports on which the RabbitMQ cluster accepts connections"
+  rabbitmq-server.timeouts.port:
+    description: "Server and client timeout for a specific port"
+
+  rabbitmq-server.administrators.broker.username:
+    description: "RabbitMQ admin username for broker"
+  rabbitmq-server.administrators.broker.password:
+    description: "RabbitMQ admin password for broker"
+  rabbitmq-server.administrators.management.username:
+    description: "RabbitMQ admin username for operator"
+  rabbitmq-server.administrators.management.password:
+    description: "RabbitMQ admin password for operator"
+
+  rabbitmq-server.override_config:
+    description: "RabbitMQ configuration in Cuttlefish format. Overrides any config set by the release."
+    example: |
+      prometheus.return_per_object_metrics = true
+      collect_statistics_interval = 10000
+
+  rabbitmq-server.override_advanced_config:
+    description: "RabbitMQ advanced configuration in Erlang format, as a base64-encoded string. Overrides any config set by the release. Does not work if rabbitmq-server.oauth.enabled."
+    example: "WwogIHtyYWJiaXQsIFsKICAgICAge3RjcF9saXN0ZW5lcnMsIFs1NjczXX0KICAgIF0KICB9Cl0u"
+
+  rabbitmq-server.config:
+    description: "DEPRECATED. Use rabbitmq-server.override_advanced_config."
+    default: "W10u" # base64 encoding of '[].'
+
+  rabbitmq-server.erlang_major_version:
+    description: "Major version of Erlang to use on RabbitMQ instances in this deployment"
+    default: 23
+  rabbitmq-server.cookie:
+    description: "Erlang cookie used by RabbitMQ nodes and rabbitmqctl. You should set this to a secure password"
+
+  rabbitmq-server.fd_limit:
+    description: "The file descriptor limit for the RabbitMQ process"
+    default: 300000
+
+  rabbitmq-server.disk_alarm_threshold:
+    description: "The threshold in bytes of free disk space at which rabbitmq will raise an alarm"
+    default: "{mem_relative,0.4}"
+
+  rabbitmq-server.cluster_partition_handling:
+    description: "Cluster partition recover mode property. Valid values are: pause_minority, autoheal"
+    default: "pause_minority"
+
+  rabbitmq-server.force_cluster_shutdown_on_version_change:
+    description: "Force a cluster shutdown in the event of a Erlang major version upgrade, to ensure cluster consistency. This will lead to app downtime."
+    default: false
+
+  rabbitmq-server.load_definitions:
+    description: "Definitions to be loaded by RabbitMQ at startup."
+
+  rabbitmq-server.oauth.enabled:
+    description: "Enables RabbitMQ OAuth plugin"
+    default: false
+  rabbitmq-server.oauth.resource_server_id:
+    description: "Prefix used for scopes in UAA to avoid scope collisions"
+    default: ""
+  rabbitmq-server.oauth.signing_key:
+    description: "The public key (verification key) of the RSA key pair or the symmetric signing key used by UAA to sign the JWT token"
+  rabbitmq-server.oauth.signing_key_id:
+    description: "The ID of the JWT signing key to be used when signing tokens."
+  rabbitmq-server.oauth.uaa_client_id:
+    description: "The UAA client which presents a valid access_token acquired from UAA as the password in order to authenticate with RabbitMQ."
+  rabbitmq-server.oauth.uaa_location:
+    description: "UAA URL (e.g. http://localhost:8080/uaa)"
+
+  rabbitmq-server.check_queue_sync:
+    description: "If true, waits for quorum and mirror queues to sync before stopping the node"
+    default: false
+
+  rabbitmq-server.cluster_name:
+    description: "The cluster_name is used by plugins such as rabbitmq_prometheus and rabbitmq_federation. Warning: do not change the cluster_name across BOSH deployments when federation is already set up."
+    default: ""
+
+  rabbitmq-server.create_swap_delete:
+    description: "If true, configure rabbitmq-server to use vm_strategy create-swap-delete (i.e. use RabbitMQ long node names, FQDNs for Rabbit nodes names, and no hosts in erl_inetrc)."
+    default: false
+
+templates:
+  add-rabbitmqctl-to-path.bash:             bin/add-rabbitmqctl-to-path
+  cleanup-http-logs.bash:                   bin/cleanup-http-logs
+  cluster-check.bash:                       bin/cluster-check
+  drain.bash:                               bin/drain
+  pre-stop.bash.erb:                        bin/pre-stop
+  env.erb:                                  bin/env
+  kill-with-fire.bash:                      bin/kill-with-fire
+  node-check.bash.erb:                      bin/node-check
+  plugins.sh.erb:                           bin/plugins.sh
+  post-start.bash:                          bin/post-start
+  post-deploy.bash:                         bin/post-deploy
+  pre-start.bash:                           bin/pre-start
+  rabbitmq-server.init.bash:                bin/rabbitmq-server.init
+  setup.bash:                               bin/setup.sh
+  cacert.pem.erb:                           etc/cacert.pem
+  cert.pem.erb:                             etc/cert.pem
+  config.erb:                               etc/config
+  definitions.json.erb:                     etc/definitions.json
+  key.pem.erb:                              etc/key.pem
+  management-cacert.pem.erb:                etc/management-cacert.pem
+  management-cert.pem.erb:                  etc/management-cert.pem
+  management-key.pem.erb:                   etc/management-key.pem
+  users.erb:                                etc/users
+  delete_old_files.bash:                    lib/delete_old_files.bash
+  prepare-for-upgrade.bash:                 lib/prepare-for-upgrade.bash
+  rabbitmq-config-vars.bash.erb:            lib/rabbitmq-config-vars.bash
+  indicators.yml.erb:                       config/indicators.yml
+  prom_scraper_config.yml.erb:              config/prom_scraper_config.yml
+  config-files/advanced.config.erb:         etc/advanced.config
+  config-files/10-clusterDefaults.conf.erb: etc/conf.d/10-clusterDefaults.conf
+  config-files/11-tlsConfig.conf.erb:       etc/conf.d/11-tlsConfig.conf
+  config-files/12-managementConfig.conf.erb: etc/conf.d/12-managementConfig.conf
+  config-files/13-oAuth.conf.erb:           etc/conf.d/13-oAuth.conf
+  config-files/14-webSTOMP.conf.erb:        etc/conf.d/14-webSTOMP.conf
+  config-files/15-webMQTT.conf.erb:         etc/conf.d/15-webMQTT.conf
+  config-files/50-overrideConfig.conf.erb:  etc/conf.d/50-overrideConfig.conf
+
+provides:
+  - name: rabbitmq-server
+    type: rabbitmq-server
+    properties:
+    - rabbitmq-server
+
+consumes:
+  - name: rabbitmq-server
+    type: rabbitmq-server

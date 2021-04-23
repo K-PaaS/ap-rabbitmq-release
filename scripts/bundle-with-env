@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -eu
+
+export BOSH_MANIFEST=${BOSH_MANIFEST:-$(./scripts/generate-manifest)}
+
+# Configuration for bosh-cli
+export BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-https://192.168.50.6:25555}"
+export BOSH_NON_INTERACTIVE="${BOSH_NON_INTERACTIVE:-false}"
+export BOSH_CLIENT="${BOSH_CLIENT:-admin}"
+export BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
+export BOSH_CA_CERT="${BOSH_CA_CERT:-""}"
+export BOSH_DEPLOYMENT="${BOSH_DEPLOYMENT:-cf-rabbitmq}"
+
+bundle check || bundle install
+bundle exec "$@"

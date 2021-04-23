@@ -1,0 +1,16 @@
+set -eu
+
+PACKAGE_NAME="rabbitmq-admin"
+
+# required to call the go binary
+export GOROOT="$(readlink -nf /var/vcap/packages/golang)"
+export PATH="${GOROOT}/bin:${PATH}"
+export GOPATH="${BOSH_INSTALL_TARGET}"
+export GOCACHE=$PWD/cache
+
+mkdir ${BOSH_INSTALL_TARGET}/bin
+
+cd $PACKAGE_NAME
+
+go build -mod vendor -o ${BOSH_INSTALL_TARGET}/bin/restore-amqp-traffic amqp-traffic/restore-amqp-traffic/*.go
+go build -mod vendor -o ${BOSH_INSTALL_TARGET}/bin/drop-amqp-traffic amqp-traffic/drop-amqp-traffic/*.go
