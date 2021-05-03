@@ -40,3 +40,16 @@ export ERLANG_COOKIE="<%= cookie %>"
 export ERLANG_MAJOR_VERSION='<%= p('rabbitmq-server.erlang_major_version') %>'
 export ERL_INETRC_HOSTS='<%= inetrc_hosts %>'
 export RMQ_SERVER_VERSION='<%= p('rabbitmq-server.version') %>'
+
+
+<% if p("rabbitmq-server.ssl.enabled") %>
+<% if p("rabbitmq-server.cce_enable") %>
+  echo "###########################################################"
+  echo "# CE enable "
+  _vm_ip=`ip route get 8.8.8.8 | awk '{print $NF; exit}'`
+  sed -i "s/_vm_ip/$_vm_ip/" /var/vcap/jobs/rabbitmq-server/etc/conf.d/11-tlsConfig.conf
+  echo "###########################################################"
+<% else %>
+  vi -c "%g/listeners.tcp.default/d" -c "wq" /var/vcap/jobs/rabbitmq-server/etc/conf.d/11-tlsConfig.conf 
+<% end %>
+<% end %>

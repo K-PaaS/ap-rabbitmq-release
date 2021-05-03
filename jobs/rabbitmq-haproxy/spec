@@ -6,6 +6,10 @@ packages:
 - rabbitmq-common
 
 properties:
+  rabbitmq-haproxy.cce_enable:
+    defualt: false
+  rabbitmq-haproxy.backend_ca_file:
+    default: ''    
   rabbitmq-haproxy.do-not-configure-syslog:
     default: false
     description: "The haproxy_syslog.conf file will not be configured (can be used if you configure syslog-release)"
@@ -16,7 +20,7 @@ templates:
   known-packages.bash:        bin/known-packages.bash
   pre-start.bash.erb:         bin/pre-start
   haproxy_syslog.conf:        config/haproxy_syslog.conf
-
+  backend-ca-certs.erb:       config/backend-ca-certs.pem
 provides:
   - name: rabbitmq-haproxy
     type: rabbitmq-haproxy

@@ -1,0 +1,9 @@
+<% if p("rabbitmq-haproxy.cce_enable") %>
+<%
+if_p("rabbitmq-haproxy.backend_ca_file") do |pem|
+%>
+<%= pem %>
+<%
+end
+%>
+<% end %>

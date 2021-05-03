@@ -1,0 +1,15 @@
+set -eu
+
+PACKAGE_NAME="rabbitmq-service-broker"
+
+# required to call the go binary
+export GOROOT=$(readlink -nf /var/vcap/packages/cf-rabbitmq-multitenant-broker-golang)
+export GOPATH="${BOSH_INSTALL_TARGET}"
+export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+export GOCACHE=$PWD/cache
+
+mkdir ${BOSH_INSTALL_TARGET}/bin
+
+cd $PACKAGE_NAME
+
+go build -mod vendor -o ${BOSH_INSTALL_TARGET}/bin/${PACKAGE_NAME}
