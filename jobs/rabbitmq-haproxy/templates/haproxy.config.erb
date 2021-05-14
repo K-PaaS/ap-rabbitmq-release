@@ -27,7 +27,11 @@ defaults
 
 <% ports.each do |port| %>
 frontend input-<%= port %>
+    <% if p("rabbitmq-haproxy.cce_enable") && port == 5671 %>
+	bind :<%= port %>  ssl crt /var/vcap/jobs/rabbitmq-haproxy/config/ssl.pem
+    <% else %>
 	bind :<%= port %>
+    <% end %>
         default_backend output-<%= port %>
 <%  timeouts.each do |index,timeout| %>
         <%  if index.to_i == port %>
