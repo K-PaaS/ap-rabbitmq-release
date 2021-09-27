@@ -75,14 +75,14 @@ bosh 2.0 PAAS-TA-RABBITMQ-RELEASE
 
 
 ## ON-DEMAND Configuration
-------------------------
+
 - haproxy :: 1 machine
 - paasta-rmq-broker :: 1 machine
 - rmq :: 0...# machine 
 
 
 ## Release 생성
-------------------------
+
 
 ````
 $ cd ~/
