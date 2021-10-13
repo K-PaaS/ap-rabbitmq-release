@@ -30,11 +30,10 @@ openssl/openssl-1.1.1i.tar.gz:
   object_id: ee07e0f6-bc01-48d7-496b-c1516e6e1f0c
   sha: sha256:e8be6a35fe41d10603c3cc635e93289ed00bf34b79671a3a4de64fcee00d5242
 # this comment prevents git conflicts
-rabbitmq-server-3.8/rabbitmq-server-generic-unix-3.8.14.tar.xz:
-  size: 15665332
-  object_id: c40886a2-bb9c-4960-646f-78f82087f847
-  sha: sha256:c9b154ea42bb0cfd1caef4869cfae3ed0fc3579794dd08bd555057af5736c06e
-
+rabbitmq-server-3.8/rabbitmq-server-generic-unix-3.8.15.tar.xz:
+  size: 15583200
+  object_id: c9623366-a501-4756-69bb-c56c791501f4
+  sha: sha256:9e1a3f89e9baffd03bd672a8342aebc778425da116f36a6acbb8869cdcd939d2
 # this comment prevents git conflicts
 cf-rabbitmq-multitenant-broker-golang/go1.16.linux-amd64.tar.gz:
   size: 129003129
