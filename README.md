@@ -90,7 +90,7 @@ $ git clone https://github.com/PaaS-TA/rabbitmq-release.git
 $ cd rabbitmq-release
 
 # sh create.sh {RELEASE-NAEM} {VERSION}
-$ sh create.sh paasta-rabbitmq 2.1.0
+$ sh create.sh paasta-rabbitmq 2.1.1
 ````
 
 ## Contributors ✨
