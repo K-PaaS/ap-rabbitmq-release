@@ -43,7 +43,7 @@
   </tr>
   <tr align=center>
     <td><a href="https://github.com/PaaS-TA/PAAS-TA-DELIVERY-PIPELINE-RELEASE">Pipeline</a></td>
-    <td align=center><a href="https://github.com/PaaS-TA/rabbitmq-release">í ½íº© RabbitMQ</a></td>
+    <td align=center><a href="https://github.com/PaaS-TA/rabbitmq-release">ðŸš© RabbitMQ</a></td>
     <td><a href="https://github.com/PaaS-TA/PAAS-TA-ON-DEMAND-REDIS-RELEASE">Redis</a></td>
     <td><a href="https://github.com/PaaS-TA/PAAS-TA-SOURCE-CONTROL-RELEASE">Source Control</a></td>
   </tr>
@@ -61,7 +61,7 @@
     <td></td>
   </tr>
 </table>
-<i>í ½íº© You are here.</i>
+<i>ðŸš© You are here.</i>
 
 
 
@@ -97,4 +97,3 @@ $ sh create.sh paasta-rabbitmq 2.1.1
 <a href="https://github.com/PaaS-TA/rabbitmq-release/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=PaaS-TA/rabbitmq-release" />
 </a>
-
