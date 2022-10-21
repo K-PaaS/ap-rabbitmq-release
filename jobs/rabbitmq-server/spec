@@ -2,8 +2,10 @@
 ---
 name: rabbitmq-server
 packages:
-- erlang-23
+- erlang-24
 - rabbitmq-server-3.8
+- rabbitmq-server-3.9
+- rabbitmq-server-3.10
 - rabbitmq-common
 - rabbitmq-upgrade-preparation
 - rabbitmq-admin
@@ -12,7 +14,7 @@ packages:
 properties:
   rabbitmq-server.version:
     description: "Version of RabbitMQ to use"
-    default: "3.8"
+    default: "3.10"
 
   rabbitmq-server.cce_enable:
   rabbitmq-server.ssl.enabled:
@@ -40,6 +42,9 @@ properties:
     default: false
   rabbitmq-server.ssl.disable_non_ssl_listeners:
     description: "Should RabbitMQ reject connections on non-TLS ports when TLS is enabled"
+    default: false
+  rabbitmq-server.ssl.inter_node_enabled:
+    description: "Whether to use TLS for inter-node communications through the Erlang distribution, including by RabbitMQ CLIs. This uses the same certificates and key provided under rabbitmq-server.ssl."
     default: false
 
   rabbitmq-server.management_tls.enabled:
@@ -84,7 +89,7 @@ properties:
 
   rabbitmq-server.erlang_major_version:
     description: "Major version of Erlang to use on RabbitMQ instances in this deployment"
-    default: 23
+    default: 24
   rabbitmq-server.cookie:
     description: "Erlang cookie used by RabbitMQ nodes and rabbitmqctl. You should set this to a secure password"
 
@@ -108,13 +113,13 @@ properties:
     description: "Definitions to be loaded by RabbitMQ at startup."
 
   rabbitmq-server.oauth.enabled:
-    description: "Enables RabbitMQ OAuth plugin"
+    description: "Enables RabbitMQ OAuth plugin."
     default: false
   rabbitmq-server.oauth.resource_server_id:
     description: "Prefix used for scopes in UAA to avoid scope collisions"
     default: ""
   rabbitmq-server.oauth.signing_key:
-    description: "The public key (verification key) of the RSA key pair or the symmetric signing key used by UAA to sign the JWT token"
+    description: "The public key (verification key) of the RSA key pair used by UAA to sign the JWT token."
   rabbitmq-server.oauth.signing_key_id:
     description: "The ID of the JWT signing key to be used when signing tokens."
   rabbitmq-server.oauth.uaa_client_id:
@@ -134,6 +139,35 @@ properties:
     description: "If true, configure rabbitmq-server to use vm_strategy create-swap-delete (i.e. use RabbitMQ long node names, FQDNs for Rabbit nodes names, and no hosts in erl_inetrc)."
     default: false
 
+  rabbitmq-server.ensure_log_cache_compatibility:
+    description: "Ensures the prom_scraper source_id is compatible with log cache"
+    default: false
+
+  rabbitmq-server.prom_scraper_source_id:
+    description: "The source ID to set on scraped metrics. Must be 48 characters or less to be compatible with log-cache. Warning: Changing this on a live deployment will cause discontinuity in metrics from that deployment."
+    default: ""
+
+  rabbitmq-server.prom_scraper_labels:
+    description: "Optional metric labels (see loggregator-agent's prom_scraper job for details)"
+    default: {}
+
+  rabbitmq-server.prom_scraper_detailed_endpoint_query:
+    description: "Query parameters to append to the prom_scraper target endpoint for `/metrics/detailed`, including the leading `?`. See https://github.com/rabbitmq/rabbitmq-server/blob/master/deps/rabbitmq_prometheus/README.md#selective-querying-of-per-object-metrics"
+    default: ""
+
+  rabbitmq-server.stream.advertised_host:
+    description: "Hostname returned when asked for the stream topology."
+    default: ""
+
+  rabbitmq-server.stream.advertised_port:
+    description: "Port returned when asked for the stream topology."
+    default: ""
+
+  rabbitmq-server.stream.advertised_tls_port:
+    description: "Port returned when asked for the stream topology over TLS."
+    default: ""
+
+
 templates:
   add-rabbitmqctl-to-path.bash:             bin/add-rabbitmqctl-to-path
   cleanup-http-logs.bash:                   bin/cleanup-http-logs
@@ -146,6 +180,7 @@ templates:
   plugins.sh.erb:                           bin/plugins.sh
   post-start.bash:                          bin/post-start
   post-deploy.bash:                         bin/post-deploy
+  enable-feature-flags.bash:                bin/enable-feature-flags
   pre-start.bash:                           bin/pre-start
   rabbitmq-server.init.bash:                bin/rabbitmq-server.init
   setup.bash:                               bin/setup.sh
@@ -157,19 +192,23 @@ templates:
   management-cacert.pem.erb:                etc/management-cacert.pem
   management-cert.pem.erb:                  etc/management-cert.pem
   management-key.pem.erb:                   etc/management-key.pem
+  oAuth-signing-key.pem.erb:                etc/oAuth-signing-key.pem
   users.erb:                                etc/users
   delete_old_files.bash:                    lib/delete_old_files.bash
   prepare-for-upgrade.bash:                 lib/prepare-for-upgrade.bash
   rabbitmq-config-vars.bash.erb:            lib/rabbitmq-config-vars.bash
   indicators.yml.erb:                       config/indicators.yml
   prom_scraper_config.yml.erb:              config/prom_scraper_config.yml
+  prom_scraper_detailed_config.yml.erb:     config/prom_scraper_detailed_config.yml
   config-files/advanced.config.erb:         etc/advanced.config
+  config-files/inter_node_tls.config.erb:   etc/inter_node_tls.config
   config-files/10-clusterDefaults.conf.erb: etc/conf.d/10-clusterDefaults.conf
   config-files/11-tlsConfig.conf.erb:       etc/conf.d/11-tlsConfig.conf
   config-files/12-managementConfig.conf.erb: etc/conf.d/12-managementConfig.conf
   config-files/13-oAuth.conf.erb:           etc/conf.d/13-oAuth.conf
   config-files/14-webSTOMP.conf.erb:        etc/conf.d/14-webSTOMP.conf
   config-files/15-webMQTT.conf.erb:         etc/conf.d/15-webMQTT.conf
+  config-files/16-stream.conf.erb:          etc/conf.d/16-stream.conf
   config-files/50-overrideConfig.conf.erb:  etc/conf.d/50-overrideConfig.conf
 
 provides:
@@ -181,3 +220,7 @@ provides:
 consumes:
   - name: rabbitmq-server
     type: rabbitmq-server
+
+  - name: rabbitmq-server-address
+    type: address
+    optional: true
