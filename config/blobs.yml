@@ -1,29 +1,28 @@
 ---
-# this comment prevents git conflicts
 basht/basht_0.1.0_Linux_x86_64.tgz:
   size: 757703
   object_id: bbc2200b-670b-4562-72db-27ce98bc3161
   sha: 5dee8d242fc333672e14d9e1d70162b77eab5924
 # this comment prevents git conflicts
-erlang-24/otp_src_oss_24.3.4.5.tgz:
-  size: 60010786
-  object_id: fdcea696-06f2-4f0a-4ea9-aaeaa033b2d0
-  sha: sha256:1ff9bce02891352da5e1ba78b263cb5f465900342d9c72690b97905bf405b48b
+erlang-25/otp_src_oss_25.3.2.5.tgz:
+  size: 62913518
+  object_id: a69f910e-48b6-4881-712a-83f710f2c973
+  sha: sha256:d17c273ddd47e1105790e8bdb650be30cf2bc5a4f2d0293834b8cb784ac52323
 # this comment prevents git conflicts
-golang/go1.19.1.linux-amd64.tar.gz:
-  size: 148820241
-  object_id: 734fe109-aace-4325-5fbb-346932a93436
-  sha: sha256:acc512fbab4f716a8f97a8b3fbaa9ddd39606a28be6c2515ef7c6c6311acffde
+golang/go1.20.7.linux-amd64.tar.gz:
+  size: 100222605
+  object_id: 144bc4ef-b89c-4f77-7063-5375928d1806
+  sha: sha256:f0a87f1bcae91c4b69f8dc2bc6d7e6bfcd7524fceec130af525058c0c17b1b44
 # this comment prevents git conflicts
-haproxy/haproxy-2.6.6.tar.gz:
-  size: 4015438
-  object_id: 8b650d8e-9e67-4250-54b9-9b8c388edc8a
-  sha: sha256:d0c80c90c04ae79598b58b9749d53787f00f7b515175e7d8203f2796e6a6594d
+haproxy/haproxy-2.6.14.tar.gz:
+  size: 4067797
+  object_id: a9e4f170-c45e-40ab-472f-0a3db0b83407
+  sha: sha256:bd3dd9fa60391ca09e1225e1ac3163e45be83c3f54f2fd76a30af289cc6e4fd4
 # this comment prevents git conflicts
-openssl/openssl-1.1.1q.tar.gz:
-  size: 9864061
-  object_id: f6b64f54-3a96-46e0-6488-4ffb05fbc50f
-  sha: sha256:d7939ce614029cdff0b6c20f0e2e5703158a489a72b2507b8bd51bf8c8fd10ca
+openssl/openssl-1.1.1v.tar.gz:
+  size: 9893443
+  object_id: c96ea64d-3b9f-4bfe-5487-1040a5d272dd
+  sha: sha256:d6697e2871e77238460402e9362d47d18382b15ef9f246aba6c7bd780d38a6b0
 # this comment prevents git conflicts
 rabbitmq-server-3.8/rabbitmq-server-generic-unix-3.8.35.tar.xz:
   size: 15825620
@@ -35,12 +34,12 @@ rabbitmq-server-3.9/rabbitmq-server-generic-unix-3.9.22.tar.xz:
   object_id: 653d2b7d-0975-4eb6-762e-eeafaa3dc4d6
   sha: sha256:acf2fa033226ba389333562ec1684dfcc18a53bdf06162f29d3898c85b730be6
 # this comment prevents git conflicts
-rabbitmq-server-3.10/rabbitmq-server-generic-unix-3.10.7.tar.xz:
-  size: 12818592
-  object_id: 94246749-4b1b-49fd-48f4-4d36ee46121c
-  sha: sha256:fcb424deb300635086f3bf554063af654bb58f2aa4e84126f514acc00439f5c2
+rabbitmq-server-3.10/rabbitmq-server-generic-unix-3.10.25.tar.xz:
+  size: 15006512
+  object_id: 4e0309e6-bdab-4342-57da-368f5d6ba685
+  sha: sha256:5a915280dc6d521de9403a07e42d66ea9e3bf7d24880b356d395b950e6dcb3ca
 # this comment prevents git conflicts
-cf-rabbitmq-multitenant-broker-golang/go1.19.1.linux-amd64.tar.gz:
-  size: 148820241
-  object_id: dad74ff5-7b09-415e-765b-fd6a8dca7f5e
-  sha: sha256:acc512fbab4f716a8f97a8b3fbaa9ddd39606a28be6c2515ef7c6c6311acffde
+rabbitmq-server-3.11/rabbitmq-server-generic-unix-3.11.20.tar.xz:
+  size: 15539972
+  object_id: 6f64dd60-7580-49eb-58a9-b26bd8758439
+  sha: sha256:e1e634992b5ac7b0a8da920d00c893760c1292e789f9688da3603b48417c170b
