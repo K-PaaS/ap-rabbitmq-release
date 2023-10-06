@@ -70,14 +70,11 @@
   
 
 
-## PAAS-TA-RABBITMQ-RELEASE
-bosh 2.0 PAAS-TA-RABBITMQ-RELEASE
-
-
-## ON-DEMAND Configuration
+## ap-rabbitmq-release
+## Configuration
 
 - haproxy :: 1 machine
-- paasta-rmq-broker :: 1 machine
+- broker :: 1 machine
 - rmq :: 0...# machine 
 
 
@@ -86,14 +83,14 @@ bosh 2.0 PAAS-TA-RABBITMQ-RELEASE
 
 ````
 $ cd ~/
-$ git clone https://github.com/PaaS-TA/rabbitmq-release.git
+$ git clone https://github.com/K-PaaS/ap-rabbitmq-release.git
 $ cd rabbitmq-release
 
 # sh create.sh {RELEASE-NAEM} {VERSION}
-$ sh create.sh paasta-rabbitmq 2.1.3
+$ sh create.sh ap-rabbitmq-release 2.1.3
 ````
 
 ## Contributors ✨
-<a href="https://github.com/PaaS-TA/rabbitmq-release/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=PaaS-TA/rabbitmq-release" />
+<a href="https://github.com/K-PaaS/ap-rabbitmq-release/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=K-PaaS/ap-rabbitmq-release" />
 </a>
