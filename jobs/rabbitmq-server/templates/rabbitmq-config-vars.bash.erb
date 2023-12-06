@@ -46,7 +46,7 @@ export INTER_NODE_TLS=<%= p('rabbitmq-server.ssl.inter_node_enabled') %>
 <% if p("rabbitmq-server.cce_enable") %>
   echo "###########################################################"
   echo "# CE enable "
-  _vm_ip=`ip route get 8.8.8.8 | awk '{print $NF; exit}'`
+  _vm_ip=<%= spec.ip %>
   sed -i "s/_vm_ip/$_vm_ip/" /var/vcap/jobs/rabbitmq-server/etc/conf.d/11-tlsConfig.conf
   echo "###########################################################"
 <% else %>
