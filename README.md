@@ -75,7 +75,7 @@ $ git clone https://github.com/K-PaaS/ap-rabbitmq-release.git
 $ cd rabbitmq-release
 
 # sh create.sh {RELEASE-NAEM} {VERSION}
-$ sh create.sh ap-rabbitmq-release 2.1.3
+$ sh create.sh ap-rabbitmq 2.1.3
 ````
 
 ## Contributors ✨
